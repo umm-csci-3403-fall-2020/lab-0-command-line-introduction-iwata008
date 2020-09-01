@@ -9,7 +9,7 @@ tar -xzf "$savename" -C "$temp_file"
 here=$(pwd)
 cd "$temp_file" || exit
 
-grep -ril "DELETE ME" . | xargs rm
+grep -Rl "DELETE ME!" . | xargs rm
 tar -zcf cleaned_"$savename" "$base"
 mv cleaned_"$savename" "$here"
 
