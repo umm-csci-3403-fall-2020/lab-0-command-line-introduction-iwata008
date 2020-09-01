@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 
-mktemp -d tempfile_machi
-tar -C tempfile_machi -xzf little_dir.tgz
-tar -C tempfile_machi -xzf big_dir.tgz
-cd tempfile_machi
+savename=$1
+base=$(basename -s .tgz "$savename")
+temp_file=$(mktemp -d)
 
-grep -ril "DELETE" little_dir | xargs rm -r
-grep -ril "DELETE" big_dir | xargs rm -r
+tar -xzf "$savename" -C "$temp_file"
 
-tar -C /Users/machiiwata/Desktop/CSCI_3403/Lab 0/lab-0-command-line-introduction-iwata008/cleaning -zcf cleaned_little_dir.tgz little_dir.tgz
+here=$(pwd)
+cd "$temp_file" || exit
+
+grep -ril "DELETE ME" . | xargs rm
+tar -zcf cleaned_"$savename" "$base"
+mv cleaned_"$savename" "$here"
+
+cd "$temp_file" || exit
+rm -rf "$temp_file"
+cd "$here" || exit
+
+
